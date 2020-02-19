@@ -36,9 +36,6 @@ public class HoursSpentCodingProfiler {
             System.out.println(e.toString());
         }
 
-        System.out.println("[Press Enter to return to Menu]");
-        sc.nextLine();
-        sc.nextLine();
     }
 
     public HoursSpentCodingProfiler(String userName, Scanner sc) {
