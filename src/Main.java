@@ -33,10 +33,9 @@ public class Main {
         int choice = -1;
         while (choice != 0) {
             System.out.println(language.getString("menu"));
-            System.out.println(language.getString("pos1"));
-            System.out.println(language.getString("pos2"));
-            System.out.println(language.getString("pos3"));
-            System.out.println("[4] - BETA - Hours Spent Coding Profiler");
+            System.out.println("[1] - Hours Spent Coding");
+            System.out.println("[2] - P2P Interest Counter");
+            System.out.println("[3] - Guess the Number Game");
             System.out.println(language.getString("pos0"));
             if (!sc.hasNextInt()) {
                 sc.nextLine();
@@ -45,21 +44,19 @@ public class Main {
             }
             switch (choice) {
                 case 1:
-                    HoursSpentCodingCounter.menu(sc);
-                    break;
-                case 2:
-                    P2PLendingInterestCounter.menu(sc);
-                    break;
-                case 3:
-                    GuessTheNumber.game(sc, language);
-                    break;
-                case 4:
                     System.out.println("Enter user name:");
                     sc.nextLine();
                     String userName = sc.nextLine();
-                    HoursSpentCodingProfiler profile1 = new HoursSpentCodingProfiler(userName, sc);
+                    HoursSpentCoding profile1 = new HoursSpentCoding(userName, sc);
                     profile1.loadHours(sc);
                     profile1.addHours(sc);
+                    break;
+                case 2:
+                    P2PInterestCounter counter = new P2PInterestCounter();
+                    counter.menu(sc);
+                    break;
+                case 3:
+                    GuessTheNumber.game(sc, language);
                     break;
                 case 0:
                     System.out.println(language.getString("exitmsg1"));

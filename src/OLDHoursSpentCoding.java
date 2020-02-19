@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
-public class HoursSpentCodingCounter {
+public class OLDHoursSpentCoding {
 
     private static File file = new File("./hours.txt");
 

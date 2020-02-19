@@ -3,7 +3,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
-public class P2PLendingInterestCounter {
+public class OLDP2PInterestCounter {
 
     public static void menu(Scanner sc) {
 
@@ -78,10 +78,11 @@ public class P2PLendingInterestCounter {
         return daysPassed / 365d;
     }
 
-    public static double calculateTime(String date) {
+    public static double calculateTime(String date1) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
-        LocalDate firstDate = LocalDate.parse(date, formatter);
+        LocalDate firstDate = LocalDate.parse(date1, formatter);
         long daysPassed = ChronoUnit.DAYS.between(firstDate, LocalDate.now());
         return daysPassed / 365d;
     }
+
 }

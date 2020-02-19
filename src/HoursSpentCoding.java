@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.Scanner;
 
-public class HoursSpentCodingProfiler {
+public class HoursSpentCoding {
 
     private double totalHours;
     private String userName;
@@ -38,7 +38,7 @@ public class HoursSpentCodingProfiler {
 
     }
 
-    public HoursSpentCodingProfiler(String userName, Scanner sc) {
+    public HoursSpentCoding(String userName, Scanner sc) {
         this.totalHours = 0.0;
         this.userName = userName;
         this.file = new File("./" + userName + ".txt");
