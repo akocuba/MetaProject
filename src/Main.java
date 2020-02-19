@@ -9,7 +9,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("*******************************************");
-        System.out.println("Wersja testowa");
+        System.out.println("Wersja Oficjalna");
         System.out.println("[1] - Polski; [2] - English");
         int choice = sc.nextInt();
         sc.nextLine();
