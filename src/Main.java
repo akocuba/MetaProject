@@ -9,7 +9,6 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("*******************************************");
-        System.out.println("Witaj kurwiszcze!");
         System.out.println("[1] - Polski; [2] - English");
         int choice = sc.nextInt();
         sc.nextLine();
