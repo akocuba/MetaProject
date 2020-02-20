@@ -4,10 +4,28 @@ import java.util.Scanner;
 
 public class GuessTheNumber {
 
-    public static void game(Scanner sc, ResourceBundle language){
-        Random random = new Random();
+    private String userName;
+    private ResourceBundle language;
+    private Scanner sc;
 
+    public GuessTheNumber(String userName, Scanner sc, ResourceBundle language) {
+        this.userName = userName;
+        this.language = language;
+        this.sc = sc;
+        System.out.println("*******************************************");
+        System.out.println(language.getString("guessintro") + " v1.0");
+        System.out.println();
+        System.out.println(language.getString("login") + " " + userName);
+    }
+
+    public void game(){
+
+        System.out.println(language.getString("guessrules"));
+        pressEnter();
+
+        Random random = new Random();
         int randomNumber = random.nextInt(101);
+
         System.out.println(language.getString("guess"));
         int usersNumber = -1;
         int attempts = 0;
@@ -25,14 +43,19 @@ public class GuessTheNumber {
             }
 
             while (usersNumber != randomNumber) {
-                usersNumber = sc.nextInt();
-                attempts++;
-                if (usersNumber > randomNumber) {
-                    System.out.println(language.getString("lower"));
+                if(!sc.hasNextInt()){
+                    System.out.println(language.getString("invalidnumber"));
+                } else {
+                    usersNumber = sc.nextInt();
+                    attempts++;
+                    if (usersNumber > randomNumber) {
+                        System.out.println(language.getString("lower"));
+                    }
+                    if (usersNumber < randomNumber) {
+                        System.out.println(language.getString("higher"));
+                    }
                 }
-                if (usersNumber < randomNumber) {
-                    System.out.println(language.getString("higher"));
-                }
+                sc.nextLine();
             }
             System.out.println(language.getString("correct") + " " + randomNumber + ".");
             System.out.println(language.getString("attempts1") + " " + attempts + " " + language.getString("attempts2"));
@@ -41,4 +64,11 @@ public class GuessTheNumber {
             choice = sc.nextInt();
         }
     }
+
+    private void pressEnter() {
+        System.out.println(language.getString("pressenter"));
+        sc.nextLine();
+        sc.nextLine();
+    }
+
 }

@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class P2PInterestCounter {
@@ -15,26 +16,33 @@ public class P2PInterestCounter {
     private LocalDate date4;
     private double totalProfit;
     private double interestRate;
+    private Scanner sc;
+    private String userName;
+    private ResourceBundle language;
 
     private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MM yy");
 
 
-
-    public P2PInterestCounter() {
+    public P2PInterestCounter(String userName, Scanner sc, ResourceBundle language) {
+        this.sc = sc;
+        this.userName = userName;
+        this.language = language;
+        System.out.println("*******************************************");
+        System.out.println(language.getString("p2pintro")+ " v2.0");
+        System.out.println();
+        System.out.println(language.getString("login") + " " + userName);
     }
 
-    public void menu(Scanner sc) {
-        System.out.println("P2P Lending Interest Counter v2.0");
-        System.out.println("What would you like to do:");
+    public void menu() {
 
         int choice = -1;
         while (choice != 0) {
-            System.out.println("Options available:");
-            System.out.println("[1] - Add entry");
-            System.out.println("[2] - Display entries");
-            System.out.println("[3] - Add total profit");
-            System.out.println("[4] - Calculate interest rate (up to three entries)");
-            System.out.println("[0] - Return to the Hub");
+            System.out.println(language.getString("menu"));
+            System.out.println(language.getString("adddata"));
+            System.out.println(language.getString("addprofit"));
+            System.out.println(language.getString("showdata"));
+            System.out.println(language.getString("calculateinterest"));
+            System.out.println(language.getString("pos0"));
 
             if (!sc.hasNextInt()) {
                 sc.nextLine();
@@ -43,63 +51,100 @@ public class P2PInterestCounter {
             }
             switch (choice) {
                 case 1:
-                    addEntry(sc);
+                    addEntry();
                     System.out.println();
                     break;
                 case 2:
-                    displayEntries(sc);
+                    setProfit();
                     System.out.println();
                     break;
                 case 3:
-                    setProfit(sc);
+                    displayEntries();
                     System.out.println();
                     break;
                 case 4:
-                    calculateInterestRate(sc);
+                    calculateInterestRate();
                     System.out.println();
                     break;
                 case 0:
-                    System.out.println("Closing the Program.");
+                    System.out.println(language.getString("exitprogram"));
                     System.out.println();
                     break;
                 default:
-                    System.out.println("Unrecognized command.");
+                    System.out.println(language.getString("unrecognized"));
                     System.out.println();
                     break;
             }
         }
     }
 
-    public void addEntry(Scanner sc) {
-        System.out.println("Which entry would you like to add?");
+    public void addEntry() {
+
+        int entryNumber;
+        double deposit;
         sc.nextLine();
-        int entryNumber = Integer.parseInt(sc.nextLine());
-        System.out.println("When was that entry done? (dd MM yy format)");
+
+        while (true) {
+            System.out.println(language.getString("whichentry"));
+            if (sc.hasNextInt()) {
+                entryNumber = Integer.parseInt(sc.nextLine());
+                break;
+            } else {
+                System.out.println(language.getString("unrecognized"));
+            }
+            sc.nextLine();
+        }
+
+        System.out.println(language.getString("enterdate")+ " (dd MM yy format)");
         String dateString = sc.nextLine();
-        System.out.println("How much deposit did you do?");
-        double deposit = Double.parseDouble(sc.nextLine());
-        System.out.println("Entry no: " + entryNumber + ";\tDate: " + dateString + ";\t Deposit amount: " + deposit);
+
+        while (true) {
+            System.out.println(language.getString("enterdepo"));
+            if (sc.hasNextDouble()) {
+                deposit = Double.parseDouble(sc.next());
+                break;
+            } else {
+                System.out.println(language.getString("unrecognized"));
+            }
+            sc.nextLine();
+        }
+
         setDate(dateString, entryNumber);
         setDeposit(deposit, entryNumber);
+        System.out.println(language.getString("entryno")+ ": " + entryNumber + ";\t" + language.getString("dateno") + ": " + dateString + ";\t" + language.getString("depono") + ": " + deposit);
+        pressEnter();
     }
 
-    public void displayEntries(Scanner sc) {
-        System.out.println("Date 1 : " + date1 + "; Deposit 1: " + deposit1);
-        System.out.println("Date 2 : " + date2 + "; Deposit 2: " + deposit2);
-        System.out.println("Date 3 : " + date3 + "; Deposit 3: " + deposit3);
-        System.out.println("Date 4 : " + date4 + "; Deposit 4: " + deposit4);
-        System.out.println("Total profit: " + totalProfit);
-        System.out.println("Interest rate: " + interestRate);
+    public void displayEntries() {
+        System.out.println(language.getString("dateno") + " 1 : " + date1 + ";\t" + language.getString("depono") + " 1: " + deposit1);
+        System.out.println(language.getString("dateno") + " 2 : " + date2 + ";\t" + language.getString("depono") + " 2: " + deposit2);
+        System.out.println(language.getString("dateno") + " 3 : " + date3 + ";\t" + language.getString("depono") + " 3: " + deposit3);
+        System.out.println(language.getString("dateno") + " 4 : " + date4 + ";\t" + language.getString("depono") + " 4: " + deposit4);
+        System.out.println(language.getString("totalprofit") + ": " + totalProfit);
+        System.out.println(language.getString("interestrate") + ": " + interestRate);
+        pressEnter();
     }
 
-    public void setProfit(Scanner sc) {
-        System.out.println("How much profit did you make until now?");
+    public void setProfit() {
+
         sc.nextLine();
-        this.totalProfit = Double.parseDouble(sc.nextLine());
-        System.out.println("Total profit set to " + totalProfit);
+
+        while (true) {
+            System.out.println(language.getString("setprofit"));
+            if (sc.hasNextDouble()) {
+                totalProfit = Double.parseDouble(sc.nextLine());
+                break;
+            } else {
+                System.out.println(language.getString("unrecognized"));
+            }
+            sc.nextLine();
+        }
+
+        System.out.println(language.getString("setprofit2") + ": " + totalProfit);
+        pressEnter();
     }
 
-    public void calculateInterestRate(Scanner sc) {
+    public void calculateInterestRate() {
 
         double time1 = calculateTime(date1, date2);
         double time2 = calculateTime(date2, date3);
@@ -111,14 +156,9 @@ public class P2PInterestCounter {
         double entry3 = (deposit2 + deposit3) * time3;
 //        double entry4 = (deposit3 + deposit4) * time4;
 
-
         interestRate = (totalProfit * 100d) / (entry1 + entry2 + entry3);
-        System.out.println("Interest rate = " + String.format("%.2f", interestRate) + "%");
-
-
-        System.out.println("[Press Enter to return to Menu]");
-        sc.nextLine();
-        sc.nextLine();
+        System.out.println(language.getString("interestrate") + ": " + String.format("%.2f", interestRate) + "%");
+        pressEnter();
     }
 
     private static double calculateTime(LocalDate date1, LocalDate date2) {
@@ -126,7 +166,7 @@ public class P2PInterestCounter {
 
         if (date1 == null) {
             timePassed = 0;
-        } else if (date2 == null){
+        } else if (date2 == null) {
             timePassed = calculateTime(date1);
         } else {
             timePassed = (ChronoUnit.DAYS.between(date1, date2)) / 365d;
@@ -138,35 +178,39 @@ public class P2PInterestCounter {
         return (ChronoUnit.DAYS.between(date1, LocalDate.now()) / 365d);
     }
 
-    private void setDeposit(double deposit, int depositNumber) {
-        if (depositNumber == 1) {
+    private void setDeposit(double deposit, int entryNumber) {
+        if (entryNumber == 1) {
             deposit1 = deposit;
-        } else if (depositNumber == 2) {
+        } else if (entryNumber == 2) {
             deposit2 = deposit;
-        } else if (depositNumber == 3) {
+        } else if (entryNumber == 3) {
             deposit3 = deposit;
-        } else if (depositNumber == 4) {
+        } else if (entryNumber == 4) {
             deposit4 = deposit;
         } else {
-            System.out.println("Invalid deposit number.");
+            System.out.println(language.getString("invalidentryno"));
         }
-        System.out.println("Successfully set deposit of " + deposit + " to slot " + depositNumber);
     }
 
-    private void setDate(String dateString, int dateNumber) {
+    private void setDate(String dateString, int entryNumber) {
         LocalDate date = LocalDate.parse(dateString, dateTimeFormatter);
-        if (dateNumber == 1) {
+        if (entryNumber == 1) {
             date1 = date;
-        } else if (dateNumber == 2) {
+        } else if (entryNumber == 2) {
             date2 = date;
-        } else if (dateNumber == 3) {
+        } else if (entryNumber == 3) {
             date3 = date;
-        } else if (dateNumber == 4) {
+        } else if (entryNumber == 4) {
             date4 = date;
         } else {
-            System.out.println("Invalid date number.");
+            System.out.println(language.getString("invalidentryno"));
         }
-        System.out.println("Successfully set date of " + dateString + " to slot " + dateNumber);
+    }
+
+    private void pressEnter() {
+        System.out.println(language.getString("pressenter"));
+        sc.nextLine();
+        sc.nextLine();
     }
 
 }

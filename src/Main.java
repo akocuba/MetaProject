@@ -4,38 +4,32 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static ResourceBundle language;
+    private static Scanner sc = new Scanner(System.in);
+    private static String userName;
+
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
-
         System.out.println("*******************************************");
-        System.out.println("Wersja Oficjalna");
-        System.out.println("[1] - Polski; [2] - English");
-        int choice = sc.nextInt();
-        sc.nextLine();
+        System.out.println("MetaProject Version 1.0 - 20.02.2020");
 
-        ResourceBundle language;
-        if (choice == 1) {
-            language = ResourceBundle.getBundle("text", Locale.forLanguageTag("pl-PL"));
-        } else {
-            language = ResourceBundle.getBundle("text", Locale.UK);
-        }
+        chooseLanguage();
 
-        System.out.println(language.getString("welcome"));
+        enterName();
 
-        menu(sc, language);
+        menu();
 
         sc.close();
     }
 
-    public static void menu(Scanner sc, ResourceBundle language) {
+    public static void menu() {
 
         int choice = -1;
         while (choice != 0) {
             System.out.println(language.getString("menu"));
-            System.out.println("[1] - Hours Spent Coding");
-            System.out.println("[2] - P2P Interest Counter");
-            System.out.println("[3] - Guess the Number Game");
+            System.out.println(language.getString("hourcounter"));
+            System.out.println(language.getString("interestcounter"));
+            System.out.println(language.getString("guessthenumber"));
             System.out.println(language.getString("pos0"));
             if (!sc.hasNextInt()) {
                 sc.nextLine();
@@ -44,29 +38,52 @@ public class Main {
             }
             switch (choice) {
                 case 1:
-                    System.out.println("Enter user name:");
-                    sc.nextLine();
-                    String userName = sc.nextLine();
-                    HoursSpentCoding profile1 = new HoursSpentCoding(userName, sc);
-                    profile1.loadHours(sc);
-                    profile1.addHours(sc);
+                    HoursSpentCoding hoursSpentCoding = new HoursSpentCoding(userName, sc, language);
+                    hoursSpentCoding.menu();
                     break;
                 case 2:
-                    P2PInterestCounter counter = new P2PInterestCounter();
-                    counter.menu(sc);
+                    P2PInterestCounter p2PInterestCounter = new P2PInterestCounter(userName, sc, language);
+                    p2PInterestCounter.menu();
                     break;
                 case 3:
-                    GuessTheNumber.game(sc, language);
+                    GuessTheNumber guessTheNumber = new GuessTheNumber(userName, sc, language);
+                    guessTheNumber.game();
                     break;
                 case 0:
-                    System.out.println(language.getString("exitmsg1"));
+                    System.out.println(language.getString("exitmsg1") + " " + userName + ".");
                     System.out.println(language.getString("exitmsg2"));
                     break;
                 default:
-                    System.out.println(language.getString("unreckognized"));
+                    System.out.println(language.getString("unrecognized"));
                     break;
             }
         }
+    }
+
+    public static void chooseLanguage(){
+        int choice = -1;
+        while(true) {
+            System.out.println("[1] - Polski; [2] - English");
+            if(sc.hasNextInt()) {
+                choice = sc.nextInt();
+            }
+            if (choice == 1) {
+                language = ResourceBundle.getBundle("text", Locale.forLanguageTag("pl-PL"));
+                break;
+            } else if (choice == 2) {
+                language = ResourceBundle.getBundle("text", Locale.UK);
+                break;
+            }
+            sc.nextLine();
+        }
+        sc.nextLine();
+    }
+
+    public static void enterName(){
+        System.out.println(language.getString("username"));
+        userName = sc.nextLine();
+        System.out.println(language.getString("welcome") + " " + userName + ".");
+
     }
 
 }
