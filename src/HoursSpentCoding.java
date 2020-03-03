@@ -37,6 +37,7 @@ public class HoursSpentCoding {
                 sc.nextLine();
             } else {
                 choice = sc.nextInt();
+                sc.nextLine();
             }
             switch (choice) {
                 case 1:
@@ -107,7 +108,6 @@ public class HoursSpentCoding {
 
     private void pressEnter() {
         System.out.println(language.getString("pressenter"));
-        sc.nextLine();
         sc.nextLine();
     }
 

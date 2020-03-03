@@ -16,6 +16,19 @@ public class Main {
         chooseLanguage();
 
         enterName();
+//
+//        P2PInterestCounter p2PInterestCounter = new P2PInterestCounter(userName, sc, language);
+//        p2PInterestCounter.addEntryArray();
+//        p2PInterestCounter.calculateTimePassedArray();
+//        p2PInterestCounter.setProfit();
+//        p2PInterestCounter.calculateBalanceArray();
+//        p2PInterestCounter.calculateInterestRateArray();
+//        p2PInterestCounter.addEntry();
+//        p2PInterestCounter.addEntry();
+//        p2PInterestCounter.addEntry();
+//        p2PInterestCounter.setProfit();
+//        p2PInterestCounter.displayEntries();
+//        p2PInterestCounter.calculateInterestRate();
 
         menu();
 
