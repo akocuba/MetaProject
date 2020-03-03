@@ -1,3 +1,5 @@
+package com.example.arturkocuba;
+
 import java.io.*;
 import java.util.Scanner;
 

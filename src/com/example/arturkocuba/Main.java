@@ -1,3 +1,5 @@
+package com.example.arturkocuba;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -81,10 +83,10 @@ public class Main {
                 choice = sc.nextInt();
             }
             if (choice == 1) {
-                language = ResourceBundle.getBundle("text", Locale.forLanguageTag("pl-PL"));
+                language = ResourceBundle.getBundle("com.example.arturkocuba.text", Locale.forLanguageTag("pl-PL"));
                 break;
             } else if (choice == 2) {
-                language = ResourceBundle.getBundle("text", Locale.UK);
+                language = ResourceBundle.getBundle("com.example.arturkocuba.text", Locale.UK);
                 break;
             }
             sc.nextLine();

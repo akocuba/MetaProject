@@ -1,3 +1,5 @@
+package com.example.arturkocuba;
+
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Scanner;
