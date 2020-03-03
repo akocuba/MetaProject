@@ -1,28 +1,19 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class P2PInterestCounter {
 
-    private double[] deposits;
-    private LocalDate[] dates;
-    private double[] timePassed;
-    private double[] timePlusMoney;
-    private int entryNumber;
-    private double[] balance;
+    private ArrayList<Double> deposits = new ArrayList<>();
+    private ArrayList<LocalDate> dates = new ArrayList<>();
+    private ArrayList<Double> timePassed = new ArrayList<>();
+    private ArrayList<Double> timePlusMoney = new ArrayList<>();
+    private ArrayList<Double> balance = new ArrayList<>();
 
-    private double deposit1;
-    private double deposit2;
-    private double deposit3;
-    private double deposit4;
-    private LocalDate date1;
-    private LocalDate date2;
-    private LocalDate date3;
-    private LocalDate date4;
     private double totalProfit;
-    private double interestRate;
     private Scanner sc;
     private String userName;
     private ResourceBundle language;
@@ -35,7 +26,7 @@ public class P2PInterestCounter {
         this.userName = userName;
         this.language = language;
         System.out.println("*******************************************");
-        System.out.println(language.getString("p2pintro") + " v2.0");
+        System.out.println(language.getString("p2pintro") + " v2.1");
         System.out.println();
         System.out.println(language.getString("login") + " " + userName);
     }
@@ -49,6 +40,8 @@ public class P2PInterestCounter {
             System.out.println(language.getString("addprofit"));
             System.out.println(language.getString("showdata"));
             System.out.println(language.getString("calculateinterest"));
+            System.out.println("[5] - Load Mintos");
+            System.out.println("[6] - Load WiseFund");
             System.out.println(language.getString("pos0"));
 
             if (!sc.hasNextInt()) {
@@ -73,6 +66,14 @@ public class P2PInterestCounter {
                     calculateInterestRateArray();
                     System.out.println();
                     break;
+                case 5:
+                    loadMintos();
+                    System.out.println();
+                    break;
+                case 6:
+                    loadWiseFund();
+                    System.out.println();
+                    break;
                 case 0:
                     System.out.println(language.getString("exitprogram"));
                     System.out.println();
@@ -85,12 +86,37 @@ public class P2PInterestCounter {
         }
     }
 
+    public void loadMintos() {
+        deposits.clear();
+        dates.clear();
+        deposits.add(100.0);
+        dates.add(LocalDate.parse("07 10 19", dateTimeFormatter));
+        deposits.add(-50.0);
+        dates.add(LocalDate.parse("18 10 19", dateTimeFormatter));
+        System.out.println("Mintos dates loaded.");
+
+        pressEnter();
+    }
+
+    public void loadWiseFund() {
+        deposits.clear();
+        dates.clear();
+        deposits.add(50.0);
+        dates.add(LocalDate.parse("10 10 19", dateTimeFormatter));
+        deposits.add(50.0);
+        dates.add(LocalDate.parse("22 10 19", dateTimeFormatter));
+        System.out.println("WiseFund dates loaded.");
+
+        pressEnter();
+    }
+
     public void addEntryArray() {
 
         sc.nextLine();
 
+        int entryNumber;
         while (true) {
-            System.out.println("How many entries do you want to add?");
+            System.out.println("Which entry do you want to add?");
             if (sc.hasNextInt()) {
                 entryNumber = Integer.parseInt(sc.nextLine());
                 break;
@@ -100,51 +126,44 @@ public class P2PInterestCounter {
             sc.nextLine();
         }
 
-        deposits = new double[entryNumber];
-        dates = new LocalDate[entryNumber];
-
-        for (int i = 0; i < deposits.length; i++) {
-            sc.nextLine();
-            System.out.println("Enter date " + i + " (dd MM yy format)");
-            dates[i] = LocalDate.parse(sc.nextLine(), dateTimeFormatter);
-            while (true) {
-                System.out.println("Enter deposit " + i);
-                if (sc.hasNextDouble()) {
-                    deposits[i] = Double.parseDouble(sc.next());
-                    break;
-                } else {
-                    System.out.println(language.getString("unrecognized"));
-                }
+        sc.nextLine();
+        System.out.println("Enter date: (dd MM yy format)");
+        dates.add(entryNumber, LocalDate.parse(sc.nextLine(), dateTimeFormatter));
+        while (true) {
+            System.out.println("Enter deposit:");
+            if (sc.hasNextDouble()) {
+                deposits.add(Double.parseDouble(sc.next()));
+                break;
+            } else {
+                System.out.println(language.getString("unrecognized"));
             }
         }
 
-        for(int i = 0; i < deposits.length; i++){
-            System.out.println("Date " + i + ":\t" + dates[i] + "; Deposit " + i + ":\t" + deposits[i]);
-        }
+        System.out.println("Date:\t" + dates.get(entryNumber) + "; Deposit:\t" + deposits.get(entryNumber));
 
         pressEnter();
     }
 
-    public void calculateTimePassedArray(){
-        timePassed = new double[entryNumber];
-        for(int i = 0; i < dates.length - 1; i++){
-            timePassed[i] = calculateTimeArray(dates[i], dates[i+1]);
-            System.out.println("Time passed " + i + " = " + timePassed[i]);
+    public void calculateTimePassedArray() {
+
+        for (int i = 0; i < dates.size() - 1; i++) {
+            timePassed.add(calculateTimeArray(dates.get(i), dates.get(i + 1)));
+            System.out.println("Time passed " + i + " = " + timePassed.get(i));
         }
-        for(int i = dates.length - 1; i < dates.length; i++){
-            timePassed[i] = calculateTimeArray(dates[i]);
-            System.out.println("Time passed " + i + " = " + timePassed[i]);
+        for (int i = dates.size() - 1; i < dates.size(); i++) {
+            timePassed.add(calculateTimeArray(dates.get(i)));
+            System.out.println("Time passed " + i + " = " + timePassed.get(i));
         }
 
     }
 
-    public void calculateBalanceArray(){
-        balance = new double[entryNumber];
-        balance[0] = deposits[0];
-        System.out.println("Balance 0 = " + balance[0]);
-        for(int i = 1; i < deposits.length; i++){
-            balance[i] = balance[i-1] + deposits[i];
-            System.out.println("Balance " + i + " = " + balance[i]);
+    public void calculateBalanceArray() {
+        balance.clear();
+        balance.add(0, deposits.get(0));
+        System.out.println("Balance 0 = " + balance.get(0));
+        for (int i = 1; i < deposits.size(); i++) {
+            balance.add(i,balance.get(i-1)+ deposits.get(i));
+            System.out.println("Balance " + i + " = " + balance.get(i));
         }
     }
 
@@ -153,11 +172,11 @@ public class P2PInterestCounter {
         calculateTimePassedArray();
         calculateBalanceArray();
 
-        timePlusMoney = new double[entryNumber];
+        timePlusMoney.clear();
 
-        for(int i = 0; i < deposits.length; i++){
-            timePlusMoney[i] = balance[i] * timePassed[i];
-            System.out.println("Time plus money " + i + " = " + timePlusMoney[i]);
+        for (int i = 0; i < deposits.size(); i++) {
+            timePlusMoney.add(i,balance.get(i) * timePassed.get(i));
+            System.out.println("Time plus money " + i + " = " + timePlusMoney.get(i));
         }
         double entrySum = 0;
         for (double v : timePlusMoney) {
@@ -165,14 +184,14 @@ public class P2PInterestCounter {
             System.out.println("Entrysum = " + entrySum);
         }
 
-        interestRate = (totalProfit * 100d) / entrySum;
+        double interestRate = (totalProfit * 100d) / entrySum;
         System.out.println(language.getString("interestrate") + ": " + String.format("%.2f", interestRate) + "%");
         pressEnter();
     }
 
     private static double calculateTimeArray(LocalDate date1, LocalDate date2) {
         System.out.println("Days passed: " + ChronoUnit.DAYS.between(date1, date2));
-        return  (ChronoUnit.DAYS.between(date1, date2)) / 365d;
+        return (ChronoUnit.DAYS.between(date1, date2)) / 365d;
     }
 
     private static double calculateTimeArray(LocalDate date1) {
@@ -180,62 +199,15 @@ public class P2PInterestCounter {
         return (ChronoUnit.DAYS.between(date1, LocalDate.now()) / 365d);
     }
 
-    public void displayEntriesArray(){
+    public void displayEntriesArray() {
 
-        if(deposits == null){
+        if (deposits == null) {
             System.out.println("No data to show");
         } else {
-            for (int i = 0; i < deposits.length; i++) {
-                System.out.println("Date " + i + ":\t" + dates[i] + "; Deposit " + i + ":\t" + deposits[i]);
+            for (int i = 0; i < deposits.size(); i++) {
+                System.out.println("Date " + i + ":\t" + dates.get(i) + "; Deposit " + i + ":\t" + deposits.get(i));
             }
         }
-        pressEnter();
-    }
-
-    public void addEntry() {
-
-        int entryNumber;
-        double deposit;
-        sc.nextLine();
-
-        while (true) {
-            System.out.println(language.getString("whichentry"));
-            if (sc.hasNextInt()) {
-                entryNumber = Integer.parseInt(sc.nextLine());
-                break;
-            } else {
-                System.out.println(language.getString("unrecognized"));
-            }
-            sc.nextLine();
-        }
-
-        System.out.println(language.getString("enterdate") + " (dd MM yy format)");
-        String dateString = sc.nextLine();
-
-        while (true) {
-            System.out.println(language.getString("enterdepo"));
-            if (sc.hasNextDouble()) {
-                deposit = Double.parseDouble(sc.next());
-                break;
-            } else {
-                System.out.println(language.getString("unrecognized"));
-            }
-            sc.nextLine();
-        }
-
-        setDate(dateString, entryNumber);
-        setDeposit(deposit, entryNumber);
-        System.out.println(language.getString("entryno") + ": " + entryNumber + ";\t" + language.getString("dateno") + ": " + dateString + ";\t" + language.getString("depono") + ": " + deposit);
-        pressEnter();
-    }
-
-    public void displayEntries() {
-        System.out.println(language.getString("dateno") + " 1 : " + date1 + ";\t" + language.getString("depono") + " 1: " + deposit1);
-        System.out.println(language.getString("dateno") + " 2 : " + date2 + ";\t" + language.getString("depono") + " 2: " + deposit2);
-        System.out.println(language.getString("dateno") + " 3 : " + date3 + ";\t" + language.getString("depono") + " 3: " + deposit3);
-        System.out.println(language.getString("dateno") + " 4 : " + date4 + ";\t" + language.getString("depono") + " 4: " + deposit4);
-        System.out.println(language.getString("totalprofit") + ": " + totalProfit);
-        System.out.println(language.getString("interestrate") + ": " + interestRate);
         pressEnter();
     }
 
@@ -256,75 +228,6 @@ public class P2PInterestCounter {
 
         System.out.println(language.getString("setprofit2") + ": " + totalProfit);
         pressEnter();
-    }
-
-    public void calculateInterestRate() {
-
-        double time1 = calculateTime(date1, date2);
-        System.out.println("Czas 1 = " + time1);
-        double time2 = calculateTime(date2, date3);
-        System.out.println("Czas 2 = " + time2);
-        double time3 = calculateTime(date3, date4);
-        System.out.println("Czas 3 = " + time3);
-//        double time4 = calculateTime(date4);
-
-        double entry1 = deposit1 * time1;
-        System.out.println("Entry 1 = " + entry1);
-        double entry2 = (deposit1 + deposit2) * time2;
-        System.out.println("Entry 2 = " + entry2);
-        double entry3 = (deposit1 + deposit2 + deposit3) * time3;
-        System.out.println("Entry 3 = " + entry3);
-//        double entry4 = (deposit3 + deposit4) * time4;
-
-        interestRate = (totalProfit * 100d) / (entry1 + entry2 + entry3);
-        System.out.println(language.getString("interestrate") + ": " + String.format("%.2f", interestRate) + "%");
-        pressEnter();
-    }
-
-    private static double calculateTime(LocalDate date1, LocalDate date2) {
-        double timePassed;
-
-        if (date1 == null) {
-            timePassed = 0;
-        } else if (date2 == null) {
-            timePassed = calculateTime(date1);
-        } else {
-            timePassed = (ChronoUnit.DAYS.between(date1, date2)) / 365d;
-        }
-        return timePassed;
-    }
-
-    private static double calculateTime(LocalDate date1) {
-        return (ChronoUnit.DAYS.between(date1, LocalDate.now()) / 365d);
-    }
-
-    private void setDeposit(double deposit, int entryNumber) {
-        if (entryNumber == 1) {
-            deposit1 = deposit;
-        } else if (entryNumber == 2) {
-            deposit2 = deposit;
-        } else if (entryNumber == 3) {
-            deposit3 = deposit;
-        } else if (entryNumber == 4) {
-            deposit4 = deposit;
-        } else {
-            System.out.println(language.getString("invalidentryno"));
-        }
-    }
-
-    private void setDate(String dateString, int entryNumber) {
-        LocalDate date = LocalDate.parse(dateString, dateTimeFormatter);
-        if (entryNumber == 1) {
-            date1 = date;
-        } else if (entryNumber == 2) {
-            date2 = date;
-        } else if (entryNumber == 3) {
-            date3 = date;
-        } else if (entryNumber == 4) {
-            date4 = date;
-        } else {
-            System.out.println(language.getString("invalidentryno"));
-        }
     }
 
     private void pressEnter() {
